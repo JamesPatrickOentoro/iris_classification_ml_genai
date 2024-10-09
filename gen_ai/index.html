@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iris Species Prediction</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        input { margin: 5px 0; }
+        button { margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+    <h1>Iris Species Prediction GEN-AI</h1>
+    <br>
+    <label for="sepal_l">Sepal Length:</label>
+    <input type="range" id="sepal_l" min="1" max="10" value="5" step="1">
+    <output id="sepal_l_value">5</output>
+    <br>
+    
+    <label for="sepal_w">Sepal Width:</label>
+    <input type="range" id="sepal_w" min="1" max="10" value="5" step="1">
+    <output id="sepal_w_value">5</output>
+    <br>
+    
+    <label for="petal_l">Petal Length:</label>
+    <input type="range" id="petal_l" min="1" max="10" value="5" step="1">
+    <output id="petal_l_value">5</output>
+    <br>
+    
+    <label for="petal_w">Petal Width:</label>
+    <input type="range" id="petal_w" min="1" max="10" value="5" step="1">
+    <output id="petal_w_value">5</output>
+    <br>
+    
+    <button id="predictButton">Predict Species</button>
+    <a href="http://localhost:8000/">
+        <button>Use Traditional ML!</button>
+      </a>
+    <h2 id="result"></h2>
+
+    <script>
+        document.getElementById('predictButton').addEventListener('click', async () => {
+            const sepal_l = document.getElementById('sepal_l').value;
+            const sepal_w = document.getElementById('sepal_w').value;
+            const petal_l = document.getElementById('petal_l').value;
+            const petal_w = document.getElementById('petal_w').value;
+
+            const response = await fetch('http://localhost:8001/predict/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ 
+                    sepal_l: parseFloat(sepal_l), 
+                    sepal_w: parseFloat(sepal_w), 
+                    petal_l: parseFloat(petal_l), 
+                    petal_w: parseFloat(petal_w),
+                })
+            })
+
+            const data = await response.json();
+            document.getElementById('result').innerText = `Predicted Species: ${data.species}`;
+            console.log(data);
+        });
+    </script>
+
+    <script>
+        const sliders = document.querySelectorAll('input[type="range"]');
+        const outputs = document.querySelectorAll('output');
+      
+        sliders.forEach((slider, index) => {
+          slider.addEventListener('input', () => {
+            outputs[index].textContent = slider.value;   
+      
+          });
+        });
+      </script>
+
+</body>
+</html>

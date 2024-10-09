@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  traditional_app:
+    build:
+      dockerfile: Dockerfile
+      context: traditional_ml
+    ports:
+      - 8000:8000
+    volumes: #sync code from app dir
+      - .:/code
+  genai_app:
+    build:
+      dockerfile: Dockerfile
+      context: gen_ai
+    ports:
+      - 8001:8000
+    volumes: #sync code from app dir
+      - .:/code
