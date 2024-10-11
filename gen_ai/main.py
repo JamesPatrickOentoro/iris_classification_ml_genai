@@ -36,7 +36,7 @@ async def predict(request: Request):
     sepal_w = data.get("sepal_w")
     petal_l = data.get("petal_l")
     petal_w = data.get("petal_w")
-    genai.configure(api_key='AIzaSyD87iA65VnuAgbqlSOK5Knv4HBfKss6xAE')
+    genai.configure(api_key='')
     model = genai.GenerativeModel("gemini-1.5-flash")
     result = predict_iris_gen(sepal_l,sepal_w,petal_l,petal_w,model)
     return {"species": result}
