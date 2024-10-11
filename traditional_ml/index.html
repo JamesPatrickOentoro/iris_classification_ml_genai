@@ -17,6 +17,7 @@
     <select id="model">
         <option value="dt">Decicion Tree</option>
         <option value="kn">KNeighbors</option>
+        <option value="gen">Gemini</option>
     </select>
     <br>
     <label for="sepal_l">Sepal Length:</label>
@@ -41,8 +42,8 @@
     
     <button id="predictButton">Predict Species</button>
     <a href="http://localhost:8001/">
-        <button>Use GEN-AI!</button>
-      </a>
+        <button>GEN-AI page</button>
+    </a>
     <h2 id="result"></h2>
 
     <script>
@@ -53,19 +54,37 @@
             const petal_w = document.getElementById('petal_w').value;
             const model = document.getElementById('model').value;
 
-            const response = await fetch('http://localhost:8000/predict/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ 
-                    sepal_l: parseFloat(sepal_l), 
-                    sepal_w: parseFloat(sepal_w), 
-                    petal_l: parseFloat(petal_l), 
-                    petal_w: parseFloat(petal_w),
-                    model: model
+            let response;
+
+            if (model === "gen") {
+                response = await fetch('http://localhost:8001/predict/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ 
+                        sepal_l: parseFloat(sepal_l), 
+                        sepal_w: parseFloat(sepal_w), 
+                        petal_l: parseFloat(petal_l), 
+                        petal_w: parseFloat(petal_w)
+                    })
                 })
-            })
+            } else{
+
+                response = await fetch('http://localhost:8000/predict/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ 
+                        sepal_l: parseFloat(sepal_l), 
+                        sepal_w: parseFloat(sepal_w), 
+                        petal_l: parseFloat(petal_l), 
+                        petal_w: parseFloat(petal_w),
+                        model: model
+                    })
+                })
+            }
 
             const data = await response.json();
             document.getElementById('result').innerText = `Predicted Species: ${data.species}`;

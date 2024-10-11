@@ -19,7 +19,7 @@ async def root():
 async def read_user(user_id: str):
     return {"user_id": user_id}
 
-@app.post("/predict/")
+@app.post("/predict")
 async def predict(request: Request):
     data = await request.json()
     sepal_l = data.get("sepal_l")
